@@ -1,75 +1,47 @@
-# React + TypeScript + Vite
+# stemwild
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React + TypeScript + Vite 프로젝트입니다. 기존 React·Vite 버전과 설정을 유지하고, 이전에 구현한 기능을 연결했습니다. 게임 코너는 포함하지 않았습니다.
 
-Currently, two official plugins are available:
+## 실행
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```sh
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+배포 파일은 `npm run build`로 `dist`에 생성됩니다. `npm run preview`로 빌드 결과를 확인합니다. `dist/index.html`을 직접 더블클릭하지 말고 Vite 서버 또는 정적 웹 서버를 사용하세요.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 기능
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- `#find`: 생년월일 또는 일간으로 열 동물 캐릭터 매칭
+- `#friends`: 둥글게 다듬은 캐릭터 카드와 오행 필터. 정화 배경은 쿨톤 베이비 핑크
+- `#saju`: 생년월일·시각 직접 입력/목록 선택, 사주 네 기둥과 오행 구성
+- `#mbti`: 16개 MBTI와 일간 동물 조합, 자기소개 편집·복사, PNG 카드 저장
+- `#wildlife`: 동물 검색, 세계 보전등급과 국내 보호정보, 서식지·위협·실천 방법·출처
+- `#ending`: 열 친구의 숲 엔딩, 선택 동물 강조, 움직임 제어와 크레딧
 
-```
+## 주요 소스
+
+- `src/App.tsx`: 메뉴와 해시 라우팅, 홈 매칭
+- `src/animals.ts`: 십천간과 동물 매칭 데이터
+- `src/conservation.ts`: 보전 정보와 출처
+- `src/mbti.ts`: 창작 MBTI 소개 문구
+- `src/components/`: 사주, MBTI, 동물 정보, 캐릭터, 엔딩 컴포넌트
+- `src/lib/`: 일주·사주 계산 및 테스트
+- `src/style.css`: 전체 반응형 스타일
+- `public/animals/`: 최종 SVG 캐릭터 10종
+- `scripts/draw-characters.mjs`: 캐릭터 SVG 재생성 원본
+
+기존 `src/App.css`, `src/index.css`, Vite 로고 파일은 보존했지만 새 진입점에서 사용하지 않습니다. `client`, `server` 폴더도 유지했습니다. 현재 기능은 브라우저 안에서 계산하며 입력을 서버로 전송하거나 저장하지 않습니다.
+
+## 계산 기준
+
+홈의 간단 매칭은 양력 날짜·자정 기준입니다. 사주 페이지는 1962년 이후 한국 출생의 양력 날짜·시각을 지원합니다. 한국 표준시와 도시 경도·균시차를 반영한 근사 태양시를 구분하고, 과거 서머타임을 보정합니다. 절입은 태양 황경으로 판정하고 일자 경계는 자정/23시 중 선택합니다. 오행 분포는 8글자의 대표 오행만 셉니다. 음력 변환·지장간·용신·대운·세운은 지원하지 않습니다.
+
+캐릭터 성격·MBTI 연결은 자기소개용 창작 설정입니다. 보전 등급은 세계/국내 평가 범위와 출처의 시점을 구분해 읽어주세요. 엔딩은 실제 공동 서식지를 표현한 장면이 아닙니다.
+
+## 검증
+
+`npm run typecheck`, `npm test`, `npm run build`를 사용할 수 있습니다. 테스트 파일은 브라우저 앱 타입 검사에서 제외하고 Node 테스트 실행기로 실행합니다.
+
+기존 소스는 루트의 `stemwild-before-integration-*.zip`으로 먼저 백업했습니다.
