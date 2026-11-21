@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "typecheck": "tsc -b --pretty false",
-    "test": "tsx --test src/lib/calendar.test.ts src/lib/saju.test.ts"
+    "test": "tsx --test src/lib/calendar.test.ts src/lib/saju.test.ts src/lib/game.test.ts"
   },
   "dependencies": {
     "react": "^19.3.1",
